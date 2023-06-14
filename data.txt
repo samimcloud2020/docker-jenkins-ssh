@@ -15,3 +15,7 @@ $ docker exec -it kenkins bash
 $ docker cp remote-key jenkins:/tmp/remote-key
 $ cd /tmp
 $ ssh -i /tmp/remote-key remote_user@remote_host
+-------------------------------------------------------------
+mid it
+$ docker-compose up -d    
+$ sudo chown -R 1000:1000 /root/jenkins_home    $id    ----1000 for outside root, its user
