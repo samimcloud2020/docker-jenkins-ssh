@@ -19,3 +19,45 @@ $ ssh -i /tmp/remote-key remote_user@remote_host
 mid it
 $ docker-compose up -d    
 $ sudo chown -R 1000:1000 /root/jenkins_home    $id    ----1000 for outside root, its user
+----------------------------------------------------------------------------------
+Remove Containers Command:
+
+#!/bin/bash
+# Remove all stopped containers
+docker rm $(docker ps -a -q)
+# Remove all containers
+docker rm -f $(docker ps -a -q)
+Command options:
+
+--force or -f: Force the removal of running container (uses SIGKILL).
+
+--volumes or -v: Remove the Volumes associated with the container.
+
+--link or -l: Remove the specified link.
+
+Remove Images Command:
+
+# Delete all images
+docker rmi $(docker images -q)
+Command options:
+
+--force or -f: Force removal of the image. --no-prune: Do not delete untagged parents.
+
+System Prune Command: -- Suggested by Ryan Allan in comments.
+
+#!/bin/bash
+#System Prune
+docker system prune
+--all or -a: Remove all unused images not just dangling ones.
+
+--filter Provide filter values (e.g. 'label==') <-- From API 1.28+
+
+--force or -f: Do not prompt for confirmation.
+
+--volumes: Prune volumes.
+
+Base Command:
+
+docker: The base command for Docker CLI.
+
+Code referenced from Docker remove all images and containers
