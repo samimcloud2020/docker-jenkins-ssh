@@ -7,19 +7,75 @@ $ docker-compose build
 $ docker-compose up -d
 
 ---------------------------------------
-$ docker exec -it kenkins bash
+$ docker exec -it jenkins bash
 # ssh remote_user@remote_host
 # ping remote_host
 # exit
 
+
 $ docker cp remote-key jenkins:/tmp/remote-key
-$ cd /tmp
-$ ssh -i /tmp/remote-key remote_user@remote_host
+$ docker exec -it jenkins bash
+# cd /tmp
+# ssh -i /tmp/remote-key remote_user@remote_host  ----you entered remote-user
 -------------------------------------------------------------
 mid it
 $ docker-compose up -d    
 $ sudo chown -R 1000:1000 /root/jenkins_home    $id    ----1000 for outside root, its user
 ----------------------------------------------------------------------------------
+1st: set global credentials
+manage jenkins----credentials--------system---global credentials----add credentials-----
+kind: ssh username with private key
+scope: global 
+username: remote-user
+then create
+
+2nd: manage jenkins------system----ssh to remote host------
+host name: remote-host
+port: 22
+credential: remote_user
+check con:
+
+3rd: new item-----
+item name: remote ssh
+freestyle
+build step: exeecute script on remote host with ssh
+
+NAME="samim patel"
+echo "my name is $NAME" > /tmp/1.txt
+
+build now-----console output
+
+root@ip-172-31-85-160:~/jenkins_home# docker exec -it jenkins bash
+jenkins@3b8586a378fa:/$ cd /tmp
+jenkins@3b8586a378fa:/tmp$ ssh -i remote-key remote_user@remote-host
+Last login: Wed Jun 14 16:51:24 2023 from 172.19.0.3
+[remote_user@5f9d46f9d2bb ~]$ ls
+[remote_user@5f9d46f9d2bb ~]$ cd /tmp
+[remote_user@5f9d46f9d2bb tmp]$ ls
+1.txt  ks-script-4luisyla  ks-script-o23i7rc2  ks-script-x6ei4wuu
+[remote_user@5f9d46f9d2bb tmp]$ cat 1.txt
+ my name is samim patel on date
+[remote_user@5f9d46f9d2bb tmp]$ exit
+logout
+
+--------------------------------------------------------------------------------------------------------------------------
+
+root@ip-172-31-85-160:~/jenkins_home# docker cp remote-key jenkins:/tmp
+root@ip-172-31-85-160:~/jenkins_home# docker exec -it jenkins bash
+jenkins@3b8586a378fa:/$ ping remote-host
+bash: ping: command not found
+jenkins@3b8586a378fa:/$ cd /tmp
+jenkins@3b8586a378fa:/tmp$ ls
+hsperfdata_jenkins  jetty-0_0_0_0-8080-war-_-any-16284274569988361605  remote-key  winstone4000724465497731184.jar
+jenkins@3b8586a378fa:/tmp$ ssh -i remote-key remote_user@remote-host
+Last login: Wed Jun 14 16:50:16 2023 from 172.19.0.3
+[remote_user@5f9d46f9d2bb ~]$ ls
+[remote_user@5f9d46f9d2bb ~]$ exit
+logout
+Connection to remote-host closed.
+
+
+----------------------------------------------------------------------------------------------------------------
 Remove Containers Command:
 
 #!/bin/bash
