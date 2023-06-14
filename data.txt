@@ -1,0 +1,17 @@
+$ ssh-keygen -f remote-key
+
+got remote-key (private key)
+public key: remote-key.pub
+
+$ docker-compose build
+$ docker-compose up -d
+
+---------------------------------------
+$ docker exec -it kenkins bash
+# ssh remote_user@remote_host
+# ping remote_host
+# exit
+
+$ docker cp remote-key jenkins:/tmp/remote-key
+$ cd /tmp
+$ ssh -i /tmp/remote-key remote_user@remote_host
