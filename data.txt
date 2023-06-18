@@ -18,6 +18,27 @@ $ docker exec -it jenkins bash
 # cd /tmp
 # ssh -i /tmp/remote-key remote_user@remote_host  ----you entered remote-user
 -------------------------------------------------------------
+Looks like permission on your SSH key are indeed not set properly. You cannot change the file permission as 
+it's owned by 245867976 but your bash session is ran by jenkins user.
+
+You should change the file ownership key using root:
+
+docker exec -it -u root jenkins bash
+$ chown jenkins:jenkins /tmp/remote-key 
+$ exit
+
+-u flag will run bash in jenkins container as root user, with which you should be able to 
+change your file permission. Then try again:
+
+docker exec -it jenkins bash
+$ ssh -i /tmp/remote-key remote_user@remote_host
+Note: you can also directly run ssh with root without needing to change permissions
+
+docker exec -it -u root jenkins bash
+$ ssh -i /tmp/remote-key remote_user@remote_host
+
+
+------------------------------------------------------------------------------
 mid it
 $ docker-compose up -d    
 $ sudo chown -R 1000:1000 /root/jenkins_home    $id    ----1000 for outside root, its user
